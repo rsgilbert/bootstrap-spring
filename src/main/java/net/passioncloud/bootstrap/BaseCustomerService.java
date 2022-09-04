@@ -32,6 +32,9 @@ public class BaseCustomerService implements CustomerService{
         List<Customer> customerList = new ArrayList<>();
 
         for(String name: names) {
+            if(name.equals("Jane")) {
+                throw new RuntimeException("xxx " + findAll().size());
+            }
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(con -> {
                 PreparedStatement ps = con.prepareStatement(
