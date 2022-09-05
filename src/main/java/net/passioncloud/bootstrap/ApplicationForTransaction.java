@@ -3,6 +3,7 @@ package net.passioncloud.bootstrap;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -14,21 +15,16 @@ import javax.sql.DataSource;
 
 
 @Configuration
+@Import(DataSourceConfiguration.class)
 public class ApplicationForTransaction {
     public static void main(String[] args) {
-//        DataSource dataSource = new EmbeddedDatabaseBuilder()
-//                .setType(EmbeddedDatabaseType.H2).build();
-//        dataSource = MyDataSourceUtils.initializeDdl(dataSource);
-//        Demo.workWithCustomerService(ApplicationForTransaction.class, customerService);
-        ApplicationContext ac = SpringUtils.run(ApplicationForTransaction.class, "j");
+        ApplicationContext ac = SpringUtils.run(ApplicationForTransaction.class, "prod");
         CustomerService cs = (CustomerService) ac.getBean("customerService");
         Demo.workWithCustomerService(ApplicationForTransaction.class, cs);
     }
 
     // -- bean provider methods
 
-
-    @Profile("j")
     @Bean
     PlatformTransactionManager transactionManager(DataSource ds) {
         return new DataSourceTransactionManager(ds);
